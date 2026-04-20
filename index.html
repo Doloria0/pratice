@@ -38,7 +38,7 @@
 
     <!-- Section: SYNERGY (Hero) -->
     <header id="synergy" class="hero section">
-        <div class="hero-bg" style="background-image: url('premium_semiconductor_bg_1776048791194.png')"></div>
+        <div class="hero-bg" style="background-image: url('premium_robot_semiconductor_bg_1776652564868.png')"></div>
         <div class="hero-overlay"></div>
         <div class="container hero-content" data-aos="fade-up">
             <h2 class="hero-label">SAMSUNG ELECTRONICS DS | Semiconductor Maintenance</h2>
@@ -102,63 +102,108 @@
                 <span class="sub-title">ACADEMIC ROADMAP</span>
                 <h2 class="title">로봇소프트웨어과 학사 로드맵</h2>
             </div>
-            <div class="roadmap-container glass">
-                <div class="roadmap-column" data-aos="fade-right">
-                    <div class="roadmap-header foundation">전공기초</div>
-                    <div class="roadmap-list">
-                        <span>엔지니어링 기초</span>
-                        <span>3차원 CAD</span>
-                        <span>컴퓨터와 챗GPT 활용</span>
-                        <span>로봇기초실습</span>
-                        <span>전공영어</span>
+            <div class="academic-tabs" data-aos="fade-up">
+                <button class="tab-btn active" onclick="showYear(1)">1학년</button>
+                <button class="tab-btn" onclick="showYear(2)">2학년</button>
+                <button class="tab-btn" onclick="showYear(3)">3학년</button>
+            </div>
+
+            <div class="roadmap-display glass" data-aos="zoom-in">
+                <!-- Year 1 -->
+                <div id="year1" class="year-content active">
+                    <div class="year-header">
+                        <span class="year-number">1st Year</span>
+                        <h3>로봇소프트웨어 전공 입문 및 기초 확립</h3>
                     </div>
-                </div>
-                <div class="roadmap-arrow"><i class="fa-solid fa-chevron-right"></i></div>
-                <div class="roadmap-column wide" data-aos="fade-up">
-                    <div class="roadmap-header practical">전공실무</div>
-                    <div class="practical-grid">
-                        <div class="sub-column">
-                            <span>기계제도</span>
-                            <span>로봇공학기초</span>
-                            <span>CAD기초</span>
-                            <span>전기회로</span>
-                            <span>전자회로</span>
-                            <span>디지털논리회로</span>
-                            <span>파이썬프로그래밍</span>
+                    <div class="semester-grid">
+                        <div class="semester-box">
+                            <h4 class="semester-title">1학년 1학기</h4>
+                            <div class="subject-list">
+                                <div class="subject-item primary"><span>3차원 CAD</span><small>교과</small></div>
+                                <div class="subject-item primary"><span>디지털 논리회로</span><small>교과</small></div>
+                                <div class="subject-item"><span>로봇 기초실습</span><small>교과</small></div>
+                                <div class="subject-item"><span>전기회로 및 실습</span><small>교과</small></div>
+                                <div class="subject-item"><span>기초수학</span><small>교과</small></div>
+                                <div class="subject-item"><span>진로설계와 실천인성</span><small>교과</small></div>
+                                <div class="subject-item"><span>엔지니어링 기초</span><small>교과</small></div>
+                                <div class="subject-item"><span>관계의 문을 여는 소통의 기술</span><small>교과</small></div>
+                                <div class="subject-item"><span>진로지도 (1-A)</span><small>교과</small></div>
+                            </div>
                         </div>
-                        <div class="sub-column">
-                            <span>인공지능개론</span>
-                            <span>마이크로컨트롤러</span>
-                            <span>PLC프로그래밍</span>
-                            <span>로봇오퍼레이션</span>
-                            <span>아두이노프로그래밍</span>
-                            <span>윈도우프로그래밍</span>
-                            <span>웹프로그래밍</span>
-                            <span>ROS프로그래밍기초</span>
-                            <span>PLC제어</span>
-                            <span>PC기반제어</span>
-                        </div>
-                        <div class="sub-column">
-                            <span>인공지능응용</span>
-                            <span>펌웨어프로그래밍</span>
-                            <span>모바일앱프로그래밍</span>
-                            <span>자동화통신</span>
-                            <span>CAD 응용</span>
-                            <span>ROS프로그래밍응용</span>
-                            <span>로봇공학응용</span>
-                            <span>로봇센서</span>
-                            <span>모터제어</span>
+                        <div class="semester-box">
+                            <h4 class="semester-title">1학년 2학기</h4>
+                            <div class="subject-list">
+                                <div class="subject-item primary"><span>기계제도</span><small>교과</small></div>
+                                <div class="subject-item primary"><span>전자회로 및 실습</span><small>교과</small></div>
+                                <div class="subject-item"><span>디지털 논리회로 응용</span><small>교과</small></div>
+                                <div class="subject-item required"><span>창의적 공학 설계 (캡스톤 디자인)</span><small>교과</small></div>
+                                <div class="subject-item primary"><span>파이썬 프로그래밍</span><small>교과</small></div>
+                                <div class="subject-item online"><span>4차 산업혁명 사회의 이해</span><small>온라인교과</small></div>
+                                <div class="subject-item"><span>기초 기구학</span><small>교과</small></div>
+                                <div class="subject-item"><span>진로지도 (1-B)</span><small>교과</small></div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="roadmap-arrow"><i class="fa-solid fa-chevron-right"></i></div>
-                <div class="roadmap-column" data-aos="fade-left">
-                    <div class="roadmap-header specialization">전공분야</div>
-                    <div class="roadmap-list specialized">
-                        <div class="special-box">학년별 캡스톤 디자인</div>
-                        <div class="special-box">현장실습</div>
-                        <div class="special-box">취업 및 창업실무</div>
-                        <div class="final-box">로봇 소프트웨어 전공</div>
+
+                <!-- Year 2 -->
+                <div id="year2" class="year-content">
+                    <div class="year-header">
+                        <span class="year-number">2nd Year</span>
+                        <h3>기술 심화 및 설비 제어</h3>
+                    </div>
+                    <div class="semester-grid">
+                        <div class="semester-box">
+                            <h4 class="semester-title">2학년 1학기</h4>
+                            <div class="subject-list">
+                                <div class="subject-item primary"><span>인공지능개론</span><small>전공선택</small></div>
+                                <div class="subject-item"><span>마이크로컨트롤러</span><small>전공실무</small></div>
+                                <div class="subject-item"><span>PLC프로그래밍</span><small>전공실무</small></div>
+                                <div class="subject-item"><span>웹 프로그래밍</span><small>전공실무</small></div>
+                                <div class="subject-item"><span>전공영어</span><small>전공실무</small></div>
+                            </div>
+                        </div>
+                        <div class="semester-box">
+                            <h4 class="semester-title">2학년 2학기</h4>
+                            <div class="subject-list">
+                                <div class="subject-item required"><span>창의과제(캡스톤디자인)</span><small>전공필수</small></div>
+                                <div class="subject-item"><span>PC기반제어</span><small>전공선택</small></div>
+                                <div class="subject-item"><span>PLC 제어</span><small>전공선택</small></div>
+                                <div class="subject-item"><span>로봇센서</span><small>전공선택</small></div>
+                                <div class="subject-item"><span>펌웨어프로그래밍</span><small>전공선택</small></div>
+                                <div class="subject-item"><span>모터제어</span><small>전공선택</small></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Year 3 -->
+                <div id="year3" class="year-content">
+                    <div class="year-header">
+                        <span class="year-number">3rd Year</span>
+                        <h3>전문 실무 및 연구 완성</h3>
+                    </div>
+                    <div class="semester-grid">
+                        <div class="semester-box">
+                            <h4 class="semester-title">3학년 1학기</h4>
+                            <div class="subject-list">
+                                <div class="subject-item required"><span>창의연구(캡스톤디자인)</span><small>전공필수</small></div>
+                                <div class="subject-item"><span>자동화통신</span><small>전공선택</small></div>
+                                <div class="subject-item"><span>모바일프로그래밍</span><small>전공선택</small></div>
+                                <div class="subject-item"><span>로봇오퍼레이션</span><small>전공선택</small></div>
+                                <div class="subject-item"><span>ROS프로그래밍기초</span><small>전공선택</small></div>
+                            </div>
+                        </div>
+                        <div class="semester-box">
+                            <h4 class="semester-title">3학년 2학기</h4>
+                            <div class="subject-list">
+                                <div class="subject-item required"><span>취업및창업실무</span><small>전공필수</small></div>
+                                <div class="subject-item"><span>로보틱스</span><small>전공선택</small></div>
+                                <div class="subject-item"><span>인공지능응용</span><small>전공선택</small></div>
+                                <div class="subject-item"><span>ROS프로그래밍응용</span><small>전공선택</small></div>
+                                <div class="subject-item highlight"><span>로봇 소프트웨어 전공</span><small>최종분야</small></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -299,6 +344,9 @@
                         </div>
                         <div class="input-group">
                             <input type="text" id="post-author" placeholder="작성자 성함" required>
+                        </div>
+                        <div class="input-group">
+                            <input type="password" id="post-password" placeholder="비밀번호 설정" required>
                         </div>
                         <div class="input-group full">
                             <textarea id="post-content" placeholder="내용을 입력하세요" rows="10" required></textarea>

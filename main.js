@@ -198,7 +198,79 @@ window.onclick = (event) => {
     }
 };
 
-// Navbar Scroll Effect
+// Screen Switching Logic
+const navLinks = document.querySelectorAll('.nav-links li a');
+const sections = document.querySelectorAll('.section');
+
+function showSection(sectionId) {
+    // Hide all sections
+    sections.forEach(section => {
+        section.classList.remove('active');
+        section.style.display = 'none';
+    });
+
+    // Show target section
+    const targetSection = document.getElementById(sectionId);
+    if (targetSection) {
+        targetSection.classList.add('active');
+        // Handle special display for hero section
+        if (targetSection.classList.contains('hero')) {
+            targetSection.style.display = 'flex';
+        } else {
+            targetSection.style.display = 'block';
+        }
+    }
+
+    // Update nav links active state
+    navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === `#${sectionId}`) {
+            link.classList.add('active');
+        }
+    });
+
+    // Reset AOS for the newly shown section
+    AOS.refresh();
+    
+    // Scroll to top
+    window.scrollTo(0, 0);
+}
+
+// Add click events to nav links
+navLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const sectionId = link.getAttribute('href').substring(1);
+        showSection(sectionId);
+        closeMobileMenu();
+    });
+});
+
+// Add click event to nav logo
+const navLogo = document.querySelector('.nav-logo');
+if (navLogo) {
+    navLogo.addEventListener('click', (e) => {
+        e.preventDefault();
+        showSection('synergy');
+        closeMobileMenu();
+    });
+}
+
+function closeMobileMenu() {
+    const navLinksContainer = document.querySelector('.nav-links');
+    const navToggle = document.querySelector('.nav-toggle');
+    if (navLinksContainer && navLinksContainer.classList.contains('active')) {
+        navLinksContainer.classList.remove('active');
+        navToggle.classList.remove('active');
+    }
+}
+
+// Initial Visibility - Show SYNERGY (Hero) by default
+document.addEventListener('DOMContentLoaded', () => {
+    showSection('synergy');
+});
+
+// Navbar Scroll Effect (Shadow & Height)
 window.addEventListener('scroll', () => {
     const navbar = document.querySelector('.navbar');
     if (window.scrollY > 50) {
@@ -208,25 +280,6 @@ window.addEventListener('scroll', () => {
         navbar.style.boxShadow = 'none';
         navbar.style.height = '80px';
     }
-
-    // Update active nav link
-    let current = '';
-    const sections = document.querySelectorAll('section, header');
-    sections.forEach(section => {
-        const sectionTop = section.offsetTop;
-        const sectionHeight = section.clientHeight;
-        if (pageYOffset >= (sectionTop - 200)) {
-            current = section.getAttribute('id');
-        }
-    });
-
-    const navItems = document.querySelectorAll('.nav-links li a');
-    navItems.forEach(item => {
-        item.classList.remove('active');
-        if (item.getAttribute('href').substring(1) === current) {
-            item.classList.add('active');
-        }
-    });
 });
 
 // --- Bulletin Board Logic ---
@@ -244,6 +297,32 @@ function savePosts() {
     renderPosts();
 }
 
+// Academic Roadmap Tab Logic
+window.showYear = function(year) {
+    // Update tab buttons
+    const tabs = document.querySelectorAll('.tab-btn');
+    tabs.forEach(tab => {
+        tab.classList.remove('active');
+        if (tab.innerText === `${year}학년`) {
+            tab.classList.add('active');
+        }
+    });
+
+    // Update content visibility
+    const contents = document.querySelectorAll('.year-content');
+    contents.forEach(content => {
+        content.classList.remove('active');
+    });
+
+    const activeContent = document.getElementById(`year${year}`);
+    if (activeContent) {
+        activeContent.classList.add('active');
+    }
+
+    // Refresh AOS for the new content
+    AOS.refresh();
+};
+
 function renderPosts() {
     if (!boardBody) return;
     boardBody.innerHTML = '';
@@ -254,19 +333,55 @@ function renderPosts() {
 
     posts.forEach((post, index) => {
         const tr = document.createElement('tr');
+        
+        const titleTd = document.createElement('td');
+        titleTd.style.fontWeight = '600';
+        titleTd.style.cursor = 'pointer';
+        titleTd.innerHTML = `
+            ${post.title}
+            ${post.adminReply ? '<span class="reply-badge">답변완료</span>' : ''}
+        `;
+        titleTd.addEventListener('click', () => viewPost(post.id));
+
         tr.innerHTML = `
             <td>${index + 1}</td>
-            <td style="font-weight: 600;">${post.title}</td>
+            <td></td> <!-- placeholder for titleTd -->
             <td>${post.author}</td>
             <td>${post.date}</td>
             <td>
                 <div class="board-actions">
-                    <button class="action-btn edit-btn" onclick="editPost(${post.id})"><i class="fa-solid fa-pen-to-square"></i></button>
-                    <button class="action-btn delete-btn" onclick="deletePost(${post.id})"><i class="fa-solid fa-trash"></i></button>
+                    <button class="action-btn reply-btn" data-id="${post.id}" title="답글"><i class="fa-solid fa-comment-dots"></i></button>
+                    <button class="action-btn edit-btn" data-id="${post.id}" title="수정"><i class="fa-solid fa-pen-to-square"></i></button>
+                    <button class="action-btn delete-btn" data-id="${post.id}" title="삭제"><i class="fa-solid fa-trash"></i></button>
                 </div>
             </td>
         `;
+
+        // Replace placeholder with the actual TD that has listener
+        const placeholderTd = tr.querySelector('td:nth-child(2)');
+        tr.replaceChild(titleTd, placeholderTd);
+
         boardBody.appendChild(tr);
+    });
+
+    // Add listeners to buttons
+    document.querySelectorAll('.reply-btn').forEach(btn => {
+        btn.onclick = (e) => {
+            e.stopPropagation();
+            replyPost(btn.dataset.id);
+        };
+    });
+    document.querySelectorAll('.edit-btn').forEach(btn => {
+        btn.onclick = (e) => {
+            e.stopPropagation();
+            editPost(btn.dataset.id);
+        };
+    });
+    document.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.onclick = (e) => {
+            e.stopPropagation();
+            deletePost(btn.dataset.id);
+        };
     });
 }
 
@@ -292,17 +407,20 @@ if (boardForm) {
         const id = document.getElementById('post-id').value;
         const title = document.getElementById('post-title').value;
         const author = document.getElementById('post-author').value;
+        const password = document.getElementById('post-password').value;
         const content = document.getElementById('post-content').value;
         const date = new Date().toLocaleDateString();
 
         if (id) {
             const index = posts.findIndex(p => p.id == id);
-            posts[index] = { ...posts[index], title, author, content, date };
+            // Optional: You could allow updating the password here too
+            posts[index] = { ...posts[index], title, author, password, content, date };
         } else {
             const newPost = {
                 id: Date.now(),
                 title,
                 author,
+                password,
                 content,
                 date
             };
@@ -318,22 +436,80 @@ window.editPost = (id) => {
     const post = posts.find(p => p.id == id);
     if (!post) return;
 
-    document.getElementById('post-id').value = post.id;
-    document.getElementById('post-title').value = post.title;
-    document.getElementById('post-author').value = post.author;
-    document.getElementById('post-content').value = post.content;
+    const inputPass = prompt('비밀번호를 입력하세요:');
+    if (inputPass === post.password) {
+        document.getElementById('post-id').value = post.id;
+        document.getElementById('post-title').value = post.title;
+        document.getElementById('post-author').value = post.author;
+        document.getElementById('post-password').value = post.password;
+        document.getElementById('post-content').value = post.content;
 
-    listView.style.display = 'none';
-    formView.style.display = 'block';
+        listView.style.display = 'none';
+        formView.style.display = 'block';
+    } else {
+        alert('비밀번호가 틀렸습니다.');
+    }
 };
 
 window.deletePost = (id) => {
-    if (confirm('정말로 이 글을 삭제하시겠습니까?')) {
-        posts = posts.filter(p => p.id != id);
+    const post = posts.find(p => p.id == id);
+    if (!post) return;
+
+    const inputPass = prompt('삭제를 위해 비밀번호를 입력하세요:');
+    if (inputPass === post.password) {
+        if (confirm('정말로 이 글을 삭제하시겠습니까?')) {
+            posts = posts.filter(p => p.id != id);
+            savePosts();
+        }
+    } else if (inputPass !== null) {
+        alert('비밀번호가 틀렸습니다.');
+    }
+};
+
+window.replyPost = (id) => {
+    const post = posts.find(p => p.id == id);
+    if (!post) return;
+
+    const modal = document.getElementById('modal');
+    const modalBody = document.getElementById('modal-body');
+    
+    modalBody.innerHTML = `
+        <div class="reply-form-container">
+            <h3>관리자 답변 작성</h3>
+            <p style="margin-bottom: 20px; color: #666;">게시글: "${post.title}"</p>
+            <div class="form-group" style="margin-bottom: 20px;">
+                <label>관리자 비밀번호</label>
+                <input type="password" id="admin-reply-pass" placeholder="비밀번호 입력" class="modal-input">
+            </div>
+            <div class="form-group" style="margin-bottom: 20px;">
+                <label>답변 내용</label>
+                <textarea id="admin-reply-text" rows="5" class="modal-textarea" placeholder="이곳에 답변을 입력하세요...">${post.adminReply || ''}</textarea>
+            </div>
+            <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                <button onclick="closeModal()" class="action-btn" style="background: #eee; padding: 10px 20px; border-radius: 5px;">취소</button>
+                <button onclick="submitAdminReply(${post.id})" class="action-btn" style="background: var(--accent-color); color: white; padding: 10px 20px; border-radius: 5px;">답변 등록</button>
+            </div>
+        </div>
+    `;
+    
+    modal.style.display = 'block';
+};
+
+window.submitAdminReply = (id) => {
+    const password = document.getElementById('admin-reply-pass').value;
+    const replyText = document.getElementById('admin-reply-text').value;
+    
+    if (password === 'admin123') {
+        const post = posts.find(p => p.id == id);
+        post.adminReply = replyText;
         savePosts();
+        alert('답변이 성공적으로 등록되었습니다.');
+        document.getElementById('modal').style.display = 'none';
+        renderPosts();
+    } else {
+        alert('관리자 비밀번호가 틀렸습니다.');
     }
 };
 
 // Initial Render
 renderPosts();
-
