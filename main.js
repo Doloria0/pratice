@@ -89,12 +89,12 @@ const expertiseDetails = {
                         <span class="thumb-label">정면도</span>
                     </div>
                     <div class="thumb-container">
-                        <img src="2.png" alt="Top View" class="modal-img-small">
+                        <img src="3.png" alt="Top View" class="modal-img-small">
                         <span class="thumb-label">평면도</span>
                     </div>
                     <div class="thumb-container">
-                        <img src="3.png" alt="Rear View" class="modal-img-small">
-                        <span class="thumb-label">배면도</span>
+                        <img src="2.png" alt="Side View" class="modal-img-small">
+                        <span class="thumb-label">측면도</span>
                     </div>
                 </div>
 
@@ -148,7 +148,7 @@ const expertiseDetails = {
         title: "Phase 03: 실시간 제어 및 알고리즘",
         content: `
             <div class="modal-detail">
-                <img src="https://images.unsplash.com/photo-1518433278988-d727705427f3?auto=format&fit=crop&q=80&w=800" alt="Control Logic" class="modal-img">
+                <img src="control_algo.png" alt="Control Logic" class="modal-img">
                 <h3>제어 기술 역량</h3>
                 <ul>
                     <li><strong>Gait Algorithm:</strong> 안정적인 보행 패턴 생성을 위한 Inverse Kinematics(역기구학) 적용.</li>
@@ -162,7 +162,7 @@ const expertiseDetails = {
         title: "Phase 04: 최적화 및 성능 평가",
         content: `
             <div class="modal-detail">
-                <img src="https://images.unsplash.com/photo-1507413245164-6160d8298b31?auto=format&fit=crop&q=80&w=800" alt="Evaluation Data" class="modal-img">
+                <img src="optimization_dashboard.jpg" alt="Optimization Dashboard" class="modal-img">
                 <h3>최종 성과 지표</h3>
                 <ul>
                     <li><strong>가동 효율성:</strong> 최적화 전 대비 배터리 소모율 15% 개선.</li>
@@ -335,11 +335,26 @@ function renderPosts() {
         const tr = document.createElement('tr');
         
         const titleTd = document.createElement('td');
-        titleTd.style.fontWeight = '600';
+        titleTd.style.padding = '20px 15px';
         titleTd.style.cursor = 'pointer';
         titleTd.innerHTML = `
-            ${post.title}
-            ${post.adminReply ? '<span class="reply-badge">답변완료</span>' : ''}
+            <div style="font-weight: 700; font-size: 1.1rem; color: #1a1a1a; margin-bottom: 8px;">
+                ${post.title}
+                ${post.adminReply ? '<span class="reply-badge">답변완료</span>' : ''}
+            </div>
+            <div style="font-size: 0.9rem; color: #64748b; margin-bottom: 10px; line-height: 1.4;">
+                ${post.content.length > 100 ? post.content.substring(0, 100) + '...' : post.content}
+            </div>
+            ${post.adminReply ? `
+                <div style="background: #f0f7ff; padding: 12px 15px; border-radius: 8px; border-left: 3px solid var(--accent-color); margin-top: 10px;">
+                    <div style="font-size: 0.8rem; font-weight: 700; color: var(--accent-color); margin-bottom: 5px;">
+                        <i class="fa-solid fa-reply"></i> 관리자 답변
+                    </div>
+                    <div style="font-size: 0.85rem; color: #1e293b;">
+                        ${post.adminReply.length > 80 ? post.adminReply.substring(0, 80) + '...' : post.adminReply}
+                    </div>
+                </div>
+            ` : ''}
         `;
         titleTd.addEventListener('click', () => viewPost(post.id));
 
@@ -432,6 +447,49 @@ if (boardForm) {
     };
 }
 
+window.viewPost = (id) => {
+    const post = posts.find(p => p.id == id);
+    if (!post) return;
+
+    // Check if detail row already exists
+    const existingDetail = document.getElementById(`detail-${id}`);
+    if (existingDetail) {
+        existingDetail.remove();
+        return;
+    }
+
+    // Remove any other open details for a cleaner look (optional)
+    document.querySelectorAll('.post-detail-row').forEach(row => row.remove());
+
+    const tr = Array.from(boardBody.querySelectorAll('tr')).find(row => {
+        const titleCell = row.querySelector('td:nth-child(2)');
+        return titleCell && titleCell.innerText.includes(post.title);
+    });
+
+    if (tr) {
+        const detailTr = document.createElement('tr');
+        detailTr.id = `detail-${id}`;
+        detailTr.className = 'post-detail-row';
+        detailTr.innerHTML = `
+            <td colspan="5">
+                <div class="expand-content" data-aos="fade-down">
+                    <div class="post-text">${post.content}</div>
+                    ${post.adminReply ? `
+                        <div class="admin-reply-box">
+                            <div class="reply-header"><i class="fa-solid fa-reply"></i> 관리자 답변</div>
+                            <div class="reply-text">${post.adminReply}</div>
+                        </div>
+                    ` : `
+                        <div class="no-reply">아직 등록된 답변이 없습니다.</div>
+                    `}
+                </div>
+            </td>
+        `;
+        tr.after(detailTr);
+        AOS.refresh();
+    }
+};
+
 window.editPost = (id) => {
     const post = posts.find(p => p.id == id);
     if (!post) return;
@@ -499,7 +557,7 @@ window.submitAdminReply = (id) => {
     const password = document.getElementById('admin-reply-pass').value;
     const replyText = document.getElementById('admin-reply-text').value;
     
-    if (password === 'admin123') {
+    if (password === '1234') {
         const post = posts.find(p => p.id == id);
         post.adminReply = replyText;
         savePosts();
