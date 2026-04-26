@@ -1,10 +1,10 @@
 // Initialize AOS (Animate on Scroll)
 document.addEventListener('DOMContentLoaded', () => {
     AOS.init({
-        duration: 1200,
+        duration: 800, // Faster animation for snappier feel
         once: true,
-        easing: 'ease-in-out',
-        offset: 100
+        easing: 'ease-out-cubic',
+        offset: window.innerWidth < 768 ? 50 : 100 // Smaller offset for mobile
     });
 
     // Navigation Toggle for Mobile
@@ -257,8 +257,11 @@ function showSection(sectionId) {
     // Reset AOS for the newly shown section
     AOS.refresh();
     
-    // Scroll to top
-    window.scrollTo(0, 0);
+    // Scroll to top with smooth behavior
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
 }
 
 // Add click events to nav links
