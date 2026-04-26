@@ -6,6 +6,31 @@ document.addEventListener('DOMContentLoaded', () => {
         easing: 'ease-in-out',
         offset: 100
     });
+
+    // Navigation Toggle for Mobile
+    const navToggle = document.querySelector('.nav-toggle');
+    const navLinksContainer = document.querySelector('.nav-links');
+
+    if (navToggle) {
+        navToggle.addEventListener('click', () => {
+            navToggle.classList.toggle('active');
+            navLinksContainer.classList.toggle('active');
+        });
+    }
+
+    // Close mobile menu on link click
+    document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('click', () => {
+            if (navToggle) navToggle.classList.remove('active');
+            if (navLinksContainer) navLinksContainer.classList.remove('active');
+        });
+    });
+
+    // Initialize first section if no hash
+    if (!window.location.hash) {
+        const firstSection = document.querySelector('.section');
+        if (firstSection) firstSection.classList.add('active');
+    }
 });
 
 // Modal Logic
